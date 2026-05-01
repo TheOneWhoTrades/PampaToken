@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PampaToken — Invertí en ganadería real</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green-deep:   #1a3a2a;
+    --green-mid:    #2d5a3d;
+    --green-soft:   #4a8c5c;
+    --green-light:  #a8d5b5;
+    --green-pale:   #e8f5ec;
+    --white:        #fafdf8;
+    --cream:        #f2f7f0;
+    --text-dark:    #0f2218;
+    --text-muted:   #5a7a65;
+    --accent:       #c8a84b;
+  }
+
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 300;
+    background: var(--white);
+    color: var(--text-dark);
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 48px;
+    background: rgba(250,253,248,0.88);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(74,140,92,0.12);
+    transition: box-shadow 0.3s;
+  }
+  nav.scrolled { box-shadow: 0 2px 24px rgba(26,58,42,0.08); }
+
+  .logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--green-deep);
+    letter-spacing: -0.02em;
+    text-decoration: none;
+  }
+  .logo span { color: var(--accent); }
+
+  .nav-cta {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--white);
+    background: var(--green-mid);
+    padding: 10px 22px;
+    border-radius: 100px;
+    text-decoration: none;
+    letter-spacing: 0.02em;
+    transition: background 0.2s, transform 0.15s;
+  }
+  .nav-cta:hover { background: var(--green-deep); transform: translateY(-1px); }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 120px 24px 80px;
+    position: relative;
+    overflow: hidden;
+    background: var(--green-deep);
+  }
+
+  /* SVG landscape background */
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+  }
+
+  /* Animated grass blades */
+  .grass {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 180px;
+    pointer-events: none;
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 720px;
+  }
+
+  .hero-eyebrow {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--green-light);
+    border: 1px solid rgba(168,213,181,0.4);
+    padding: 6px 16px;
+    border-radius: 100px;
+    margin-bottom: 32px;
+    animation: fadeUp 0.8s ease both;
+  }
+
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(36px, 6vw, 68px);
+    font-weight: 700;
+    line-height: 1.1;
+    color: var(--white);
+    margin-bottom: 24px;
+    animation: fadeUp 0.8s 0.1s ease both;
+  }
+
+  h1 em {
+    font-style: italic;
+    color: var(--green-light);
+  }
+
+  .hero-sub {
+    font-size: clamp(15px, 2vw, 18px);
+    font-weight: 300;
+    color: rgba(232,245,236,0.75);
+    max-width: 520px;
+    margin: 0 auto 48px;
+    line-height: 1.7;
+    animation: fadeUp 0.8s 0.2s ease both;
+  }
+
+  /* Email form */
+  .email-form {
+    display: flex;
+    gap: 0;
+    max-width: 460px;
+    margin: 0 auto;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(168,213,181,0.3);
+    border-radius: 100px;
+    padding: 6px 6px 6px 20px;
+    animation: fadeUp 0.8s 0.3s ease both;
+  }
+
+  .email-form input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    font-family: 'Outfit', sans-serif;
+    font-size: 14px;
+    font-weight: 300;
+    color: var(--white);
+    min-width: 0;
+  }
+
+  .email-form input::placeholder { color: rgba(232,245,236,0.45); }
+
+  .email-form button {
+    flex-shrink: 0;
+    background: var(--accent);
+    color: var(--green-deep);
+    font-family: 'Outfit', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    border: none;
+    border-radius: 100px;
+    padding: 12px 24px;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.15s;
+    letter-spacing: 0.02em;
+  }
+
+  .email-form button:hover { opacity: 0.88; transform: scale(1.02); }
+
+  .form-note {
+    font-size: 11.5px;
+    color: rgba(168,213,181,0.55);
+    margin-top: 14px;
+    animation: fadeUp 0.8s 0.4s ease both;
+  }
+
+  /* ── DIVIDER COW ── */
+  .cow-divider {
+    background: var(--green-deep);
+    display: flex;
+    justify-content: center;
+    padding: 0 0 40px;
+  }
+
+  /* ── HOW IT WORKS ── */
+  .section {
+    padding: 100px 24px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--green-soft);
+    margin-bottom: 16px;
+    display: block;
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(28px, 4vw, 44px);
+    font-weight: 700;
+    color: var(--green-deep);
+    line-height: 1.2;
+    max-width: 540px;
+    margin-bottom: 64px;
+  }
+
+  .section-title em { font-style: italic; color: var(--green-soft); }
+
+  /* Steps */
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 2px;
+  }
+
+  .step {
+    background: var(--cream);
+    padding: 36px 32px;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.25s;
+  }
+  .step:hover { background: var(--green-pale); }
+
+  .step-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 56px;
+    font-weight: 700;
+    color: var(--green-light);
+    line-height: 1;
+    margin-bottom: 20px;
+    display: block;
+    opacity: 0.6;
+  }
+
+  .step h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--green-deep);
+    margin-bottom: 10px;
+  }
+
+  .step p {
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.7;
+  }
+
+  /* ── WHY ── */
+  .why-section {
+    background: var(--green-pale);
+    padding: 100px 24px;
+  }
+
+  .why-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+
+  .why-text {}
+
+  .why-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .why-card {
+    background: var(--white);
+    border-radius: 16px;
+    padding: 24px 20px;
+    border: 1px solid rgba(74,140,92,0.1);
+    transition: box-shadow 0.2s, transform 0.2s;
+  }
+  .why-card:hover { box-shadow: 0 8px 32px rgba(26,58,42,0.08); transform: translateY(-2px); }
+
+  .why-icon {
+    font-size: 28px;
+    margin-bottom: 12px;
+    display: block;
+  }
+
+  .why-card h4 {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--green-deep);
+    margin-bottom: 6px;
+  }
+
+  .why-card p {
+    font-size: 12.5px;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+
+  /* ── FOOTER CTA ── */
+  .footer-cta {
+    background: var(--green-deep);
+    padding: 100px 24px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .footer-cta h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(28px, 4vw, 48px);
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 16px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .footer-cta p {
+    font-size: 16px;
+    color: var(--green-light);
+    margin-bottom: 48px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .footer-cta .email-form {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Decorative circle */
+  .footer-cta::before {
+    content: '';
+    position: absolute;
+    width: 600px; height: 600px;
+    border-radius: 50%;
+    border: 1px solid rgba(168,213,181,0.08);
+    top: 50%; left: 50%;
+    transform: translate(-50%,-50%);
+  }
+  .footer-cta::after {
+    content: '';
+    position: absolute;
+    width: 900px; height: 900px;
+    border-radius: 50%;
+    border: 1px solid rgba(168,213,181,0.04);
+    top: 50%; left: 50%;
+    transform: translate(-50%,-50%);
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: #0f2218;
+    padding: 28px 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  footer .logo { font-size: 18px; color: var(--green-light); }
+  footer .logo span { color: var(--accent); }
+
+  footer p {
+    font-size: 12px;
+    color: rgba(168,213,181,0.4);
+  }
+
+  /* ── SUCCESS STATE ── */
+  .success-msg {
+    display: none;
+    font-size: 14px;
+    color: var(--green-light);
+    margin-top: 14px;
+    animation: fadeUp 0.5s ease both;
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity:0; transform:translateY(20px); }
+    to   { opacity:1; transform:translateY(0); }
+  }
+
+  @keyframes sway {
+    0%,100% { transform: rotate(-2deg) translateX(0); }
+    50%      { transform: rotate(2deg) translateX(3px); }
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    nav { padding: 16px 24px; }
+    .why-inner { grid-template-columns: 1fr; gap: 48px; }
+    footer { padding: 24px; flex-direction: column; text-align: center; }
+    .email-form { flex-direction: column; border-radius: 16px; padding: 12px; gap: 8px; }
+    .email-form button { border-radius: 100px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#" class="logo">Pampa<span>Token</span></a>
+  <a href="#registrate" class="nav-cta">Quiero enterarme</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+
+  <!-- SVG Landscape Background -->
+  <svg class="hero-bg" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+    <!-- Sky gradient -->
+    <defs>
+      <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#0d2419"/>
+        <stop offset="100%" stop-color="#1a3a2a"/>
+      </linearGradient>
+      <linearGradient id="hillGrad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#2d5a3d"/>
+        <stop offset="100%" stop-color="#1a3a2a"/>
+      </linearGradient>
+      <linearGradient id="hill2Grad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#224433"/>
+        <stop offset="100%" stop-color="#1a3a2a"/>
+      </linearGradient>
+    </defs>
+    <rect width="1440" height="900" fill="url(#skyGrad)"/>
+    <!-- Stars -->
+    <circle cx="200" cy="80" r="1.2" fill="#a8d5b5" opacity="0.5"/>
+    <circle cx="450" cy="50" r="0.8" fill="#a8d5b5" opacity="0.4"/>
+    <circle cx="700" cy="110" r="1" fill="#a8d5b5" opacity="0.3"/>
+    <circle cx="1000" cy="60" r="1.4" fill="#a8d5b5" opacity="0.5"/>
+    <circle cx="1200" cy="90" r="0.9" fill="#a8d5b5" opacity="0.4"/>
+    <circle cx="320" cy="140" r="0.7" fill="#a8d5b5" opacity="0.3"/>
+    <circle cx="860" cy="40" r="1.1" fill="#a8d5b5" opacity="0.4"/>
+    <!-- Far hills -->
+    <path d="M0,620 Q200,520 400,580 Q600,640 800,540 Q1000,440 1200,520 Q1350,570 1440,500 L1440,900 L0,900Z" fill="url(#hill2Grad)" opacity="0.5"/>
+    <!-- Near hills -->
+    <path d="M0,700 Q180,620 360,670 Q540,720 720,640 Q900,560 1080,640 Q1260,720 1440,660 L1440,900 L0,900Z" fill="url(#hillGrad)"/>
+    <!-- Fence posts -->
+    <g stroke="#4a8c5c" stroke-width="2" opacity="0.35">
+      <line x1="80" y1="710" x2="80" y2="760"/>
+      <line x1="160" y1="705" x2="160" y2="755"/>
+      <line x1="240" y1="708" x2="240" y2="758"/>
+      <line x1="320" y1="712" x2="320" y2="762"/>
+      <line x1="80" y1="725" x2="320" y2="730"/>
+      <line x1="80" y1="745" x2="320" y2="750"/>
+      <line x1="1120" y1="680" x2="1120" y2="730"/>
+      <line x1="1200" y1="683" x2="1200" y2="733"/>
+      <line x1="1280" y1="678" x2="1280" y2="728"/>
+      <line x1="1360" y1="675" x2="1360" y2="725"/>
+      <line x1="1120" y1="695" x2="1360" y2="700"/>
+      <line x1="1120" y1="715" x2="1360" y2="720"/>
+    </g>
+    <!-- Simplified cow silhouette (left) -->
+    <g fill="#1a3a2a" opacity="0.55" transform="translate(100, 700) scale(0.9)">
+      <!-- Body -->
+      <ellipse cx="60" cy="30" rx="45" ry="25"/>
+      <!-- Head -->
+      <ellipse cx="108" cy="18" rx="18" ry="14"/>
+      <!-- Snout -->
+      <ellipse cx="124" cy="22" rx="8" ry="6"/>
+      <!-- Legs -->
+      <rect x="25" y="50" width="8" height="28" rx="3"/>
+      <rect x="42" y="52" width="8" height="26" rx="3"/>
+      <rect x="70" y="52" width="8" height="26" rx="3"/>
+      <rect x="87" y="50" width="8" height="28" rx="3"/>
+      <!-- Tail -->
+      <path d="M15,25 Q0,15 5,5" stroke="#1a3a2a" stroke-width="4" fill="none" stroke-linecap="round"/>
+      <!-- Horn -->
+      <path d="M104,6 Q100,-5 108,-8" stroke="#1a3a2a" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <!-- Ear -->
+      <ellipse cx="100" cy="8" rx="6" ry="4" transform="rotate(-20,100,8)"/>
+    </g>
+    <!-- Cow silhouette (right, smaller/farther) -->
+    <g fill="#224433" opacity="0.45" transform="translate(1200, 640) scale(0.65)">
+      <ellipse cx="60" cy="30" rx="45" ry="25"/>
+      <ellipse cx="108" cy="18" rx="18" ry="14"/>
+      <ellipse cx="124" cy="22" rx="8" ry="6"/>
+      <rect x="25" y="50" width="8" height="28" rx="3"/>
+      <rect x="42" y="52" width="8" height="26" rx="3"/>
+      <rect x="70" y="52" width="8" height="26" rx="3"/>
+      <rect x="87" y="50" width="8" height="28" rx="3"/>
+      <path d="M15,25 Q0,15 5,5" stroke="#224433" stroke-width="4" fill="none" stroke-linecap="round"/>
+    </g>
+    <!-- Grass blades (bottom) -->
+    <g stroke="#2d5a3d" stroke-width="2" fill="none" opacity="0.6">
+      <path d="M0,900 Q10,860 5,840"/>
+      <path d="M20,900 Q25,855 30,835"/>
+      <path d="M50,900 Q55,865 48,842"/>
+      <path d="M380,900 Q385,862 390,840"/>
+      <path d="M400,900 Q408,858 404,836"/>
+      <path d="M1040,900 Q1045,858 1038,836"/>
+      <path d="M1060,900 Q1068,862 1064,840"/>
+      <path d="M1420,900 Q1428,858 1424,836"/>
+      <path d="M1440,900 Q1435,862 1438,840"/>
+    </g>
+  </svg>
+
+  <div class="hero-content">
+    <span class="hero-eyebrow">Tokenización de activos reales · Ganadería</span>
+    <h1>Invertí en<br><em>hacienda real</em><br>desde donde estés</h1>
+    <p class="hero-sub">
+      Participá del negocio ganadero argentino sin necesitar campo ni experiencia. 
+      Activos físicos, transparentes y accesibles — respaldados por bovinos reales.
+    </p>
+
+    <div id="registrate">
+      <div class="email-form" id="heroForm">
+        <input type="email" id="heroEmail" placeholder="tu@correo.com" autocomplete="email"/>
+        <button onclick="handleSubmit('heroEmail','heroSuccess','heroForm')">Quiero enterarme primero</button>
+      </div>
+      <p class="form-note">Sin spam. Te avisamos cuando abramos el acceso anticipado.</p>
+      <p class="success-msg" id="heroSuccess">✓ ¡Listo! Te contactamos cuando abramos el acceso.</p>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section style="background:var(--white); padding: 100px 24px;">
+  <div class="section" style="padding:0;">
+    <span class="section-label">¿Cómo funciona?</span>
+    <h2 class="section-title">Ganadería real,<br><em>inversión digital</em></h2>
+    <div class="steps">
+      <div class="step">
+        <span class="step-num">01</span>
+        <h3>Elegís tu inversión</h3>
+        <p>Seleccionás un lote de hacienda disponible en la plataforma. Ves el campo, los animales y la proyección de rentabilidad antes de decidir.</p>
+      </div>
+      <div class="step">
+        <span class="step-num">02</span>
+        <h3>Comprás tu participación</h3>
+        <p>Tu inversión queda registrada y respaldada por los animales reales. Todo es auditable, trazable y seguro desde el primer peso.</p>
+      </div>
+      <div class="step">
+        <span class="step-num">03</span>
+        <h3>Seguís tu hacienda</h3>
+        <p>Accedés a reportes del estado de los animales, evolución del mercado y rendimientos en tiempo real desde tu cuenta.</p>
+      </div>
+      <div class="step">
+        <span class="step-num">04</span>
+        <h3>Cobrás tu retorno</h3>
+        <p>Cuando el lote se vende, recibís tu parte proporcional. Podés reinvertir o retirar. Simple, transparente y directo.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY -->
+<section class="why-section">
+  <div class="why-inner">
+    <div class="why-text">
+      <span class="section-label">¿Por qué ganadería?</span>
+      <h2 class="section-title">Un activo con historia<br><em>y futuro</em></h2>
+      <p style="font-size:15px; color:var(--text-muted); line-height:1.8; max-width:400px;">
+        Argentina tiene una de las cuencas ganaderas más productivas del mundo. 
+        Ahora podés acceder a ese negocio sin intermediarios, con transparencia total 
+        y desde el monto que quieras.
+      </p>
+    </div>
+    <div class="why-cards">
+      <div class="why-card">
+        <span class="why-icon">🐄</span>
+        <h4>Activo real y tangible</h4>
+        <p>Cada inversión está respaldada por bovinos reales, auditados y trazables.</p>
+      </div>
+      <div class="why-card">
+        <span class="why-icon">🌿</span>
+        <h4>Diversificá fuera del sistema financiero</h4>
+        <p>Ganadería con rendimiento en dólares, desacoplada de la volatilidad tradicional.</p>
+      </div>
+      <div class="why-card">
+        <span class="why-icon">📊</span>
+        <h4>Transparencia total</h4>
+        <p>Seguimiento en tiempo real del estado y valorización de tu hacienda.</p>
+      </div>
+      <div class="why-card">
+        <span class="why-icon">🔑</span>
+        <h4>Acceso desde montos bajos</h4>
+        <p>Sin necesidad de comprar un campo entero. Participás con lo que podés.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER CTA -->
+<section class="footer-cta">
+  <h2>Sé de los primeros<br>en acceder</h2>
+  <p>Cupos limitados para la etapa de acceso anticipado.</p>
+  <div class="email-form" id="footerForm">
+    <input type="email" id="footerEmail" placeholder="tu@correo.com" autocomplete="email"/>
+    <button onclick="handleSubmit('footerEmail','footerSuccess','footerForm')">Anotarme ahora</button>
+  </div>
+  <p class="form-note" style="color:rgba(168,213,181,0.45); margin-top:14px;">Sin compromisos. Te avisamos primero.</p>
+  <p class="success-msg" id="footerSuccess">✓ ¡Listo! Sos parte de la lista de acceso anticipado.</p>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <a href="#" class="logo">Pampa<span>Token</span></a>
+  <p>© 2025 PampaToken. Todos los derechos reservados.</p>
+</footer>
+
+<script>
+  // Nav scroll effect
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 40);
+  });
+
+  // ⚠️ Reemplazá esta URL con la de tu Google Apps Script desplegado
+  const SCRIPT_URL = 'TU_URL_DE_APPS_SCRIPT_AQUI';
+
+  // Email submit handler
+  async function handleSubmit(inputId, successId, formId) {
+    const input = document.getElementById(inputId);
+    const success = document.getElementById(successId);
+    const form = document.getElementById(formId);
+    const email = input.value.trim();
+
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      input.style.outline = '1px solid rgba(255,100,100,0.5)';
+      input.focus();
+      setTimeout(() => input.style.outline = '', 1500);
+      return;
+    }
+
+    // Deshabilitar botón mientras envía
+    const btn = form.querySelector('button');
+    btn.textContent = 'Enviando...';
+    btn.disabled = true;
+
+    try {
+      await fetch(SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, source: 'landing' })
+      });
+
+      // Con mode: no-cors no podemos leer la respuesta, pero si no tira error es exitoso
+      form.style.display = 'none';
+      success.style.display = 'block';
+
+    } catch (err) {
+      btn.textContent = 'Quiero enterarme primero';
+      btn.disabled = false;
+      alert('Hubo un error. Por favor intentá de nuevo.');
+    }
+  }
+
+  // Subtle scroll reveal
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.style.opacity = '1';
+        e.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.15 });
+
+  document.querySelectorAll('.step, .why-card').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(18px)';
+    el.style.transition = 'opacity 0.55s ease, transform 0.55s ease';
+    observer.observe(el);
+  });
+</script>
+</body>
+</html>
